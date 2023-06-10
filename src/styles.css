@@ -1,0 +1,19 @@
+.page {
+  font-family: "Inter", "Arial", "Helvetica", sans-serif;
+  background-color: #000;
+  color: #fff;
+  padding-top: 100px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 30px;
+  text-align: center;
+  margin: 0px auto 70px auto;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

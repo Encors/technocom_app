@@ -1,0 +1,16 @@
+<form class="form" #f="ngForm">
+  <label *ngIf="!selected">Выберите область</label>
+  <select
+    name="selected"
+    [(ngModel)]="selected"
+    class="form__select"
+    (ngModelChange)="changeArea(selected)"
+  >
+    <option *ngFor="let layer of layers" [ngValue]="layer">
+      {{ layer.feature.properties.name }}
+    </option>
+  </select>
+  <p *ngIf="selected">
+    Вы выбрали {{ selected.feature.properties.id }} область
+  </p>
+</form>
