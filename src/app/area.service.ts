@@ -35,7 +35,7 @@ export class AreaService {
       },
       {
         type: 'Feature',
-        properties: { id: 2, name: 'Центральный', isSelected: false },
+        properties: { id: 2, name: 'Центр', isSelected: false },
         geometry: {
           coordinates: [
             [
@@ -51,7 +51,7 @@ export class AreaService {
       },
       {
         type: 'Feature',
-        properties: { id: 3, name: 'Юго-запад', isSelected: false },
+        properties: { id: 3, name: 'Юго-восток', isSelected: false },
         geometry: {
           coordinates: [
             [

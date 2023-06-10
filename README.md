@@ -1,6 +1,7 @@
-# TechnoApp
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.5.
+## Планы
+1. Добавить корректные типы данных
+2. Оформить READMe
+3. Рефакторинг
 
 ## Development server
 
