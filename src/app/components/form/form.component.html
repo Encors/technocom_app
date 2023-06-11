@@ -1,5 +1,5 @@
 <form class="form" #f="ngForm">
-  <label *ngIf="!selected">Выберите область</label>
+  <label class="label" *ngIf="!selected">Выберите область:</label>
   <select
     name="selected"
     [(ngModel)]="selected"
@@ -10,7 +10,7 @@
       {{ area?.feature?.properties.name }}
     </option>
   </select>
-  <p *ngIf="selected">
+  <p class="form__caption" *ngIf="selected">
     Вы выбрали {{ selected.feature?.properties.id }} область
   </p>
 </form>

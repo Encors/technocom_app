@@ -3,10 +3,20 @@
   margin: 0 50px;
   display: flex;
   flex-direction: column;
+  font-weight: 700;
 }
 
 .form__select {
   width: 200px;
   height: 40px;
   font-size: 20px;
+  text-align: center;
+}
+
+.label {
+  margin: 10px 10px;
+}
+
+.form__caption {
+  margin: 10px 0;
 }
