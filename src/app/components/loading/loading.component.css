@@ -4,7 +4,6 @@
   padding: 4px;
 }
 
-/* in-lined ellipsis and dots animation from taiwan text-spinners; avoids issue with programmatic packaging of styles in Angular 2 CLI */
 .loading {
   display: inline-block;
   overflow: hidden;

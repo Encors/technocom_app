@@ -6,11 +6,11 @@
     class="form__select"
     (ngModelChange)="changeArea(selected)"
   >
-    <option *ngFor="let layer of layers" [ngValue]="layer">
-      {{ layer.feature.properties.name }}
+    <option *ngFor="let area of areas$" [ngValue]="area">
+      {{ area?.feature?.properties.name }}
     </option>
   </select>
   <p *ngIf="selected">
-    Вы выбрали {{ selected.feature.properties.id }} область
+    Вы выбрали {{ selected.feature?.properties.id }} область
   </p>
 </form>

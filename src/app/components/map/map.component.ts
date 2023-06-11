@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import { Polygon } from 'leaflet';
 import { AreaService } from 'src/app/area.service';
 
 @Component({
@@ -10,17 +10,16 @@ import { AreaService } from 'src/app/area.service';
 })
 export class MapComponent implements OnInit {
   map: L.Map;
-  startLocation = L.latLng(51.50853, -0.12574);
-  features: any;
-  geojson: any;
+  features;
+  geojson: L.GeoJSON<GeoJSON.FeatureCollection>;
 
   constructor(private areaService: AreaService) {
-    this.features = this.areaService.getAreas();
+    this.features = this.areaService.getFeatures();
   }
 
   private initMap(): void {
     this.map = L.map('map', {
-      center: this.startLocation,
+      center: L.latLng(51.50853, -0.12574),
       zoom: 10,
       minZoom: 7,
       maxZoom: 15,
@@ -39,62 +38,64 @@ export class MapComponent implements OnInit {
     tiles.addTo(this.map);
   }
 
-  addGeoJsonFeatures() {
+  private addGeoJsonFeatures(): L.GeoJSON<GeoJSON.FeatureCollection> {
     return L.geoJSON(this.features, {
       style: this.setStyleFeature,
       onEachFeature: this.onEachFeature,
     });
   }
 
-  setStyleFeature(feature: any) {
+  private setStyleFeature(feature: any): object {
     return {
       color: 'red',
     };
   }
 
-  highlightFeature(e: any) {
-    const layer = e.target;
+  // highlightFeature(e: any) {
+  //   const layer = e.target;
 
-    layer.setStyle({
-      weight: 4,
-      color: 'blue',
-      fillOpacity: 0.2,
-    });
+  //   layer.setStyle({
+  //     weight: 4,
+  //     color: 'blue',
+  //     fillOpacity: 0.2,
+  //   });
 
-    layer.bringToFront();
-  }
+  //   layer.bringToFront();
+  // }
 
-  resetHighlight(e: any) {
-    this.geojson.resetStyle(e.target);
-  }
+  // resetHighlight(e: any) {
+  //   this.geojson.resetStyle(e.target);
+  // }
 
-  zoomToFeature(e: any) {
+  private zoomToFeatureOnClick(e: L.LeafletMouseEvent): void {
     this.map.fitBounds(e.target.getBounds());
   }
 
-  onEachFeature = (feature: any, layer: any) => {
+  private onEachFeature = (feature: object, layer: Polygon): void => {
+    //отправляем каждый слой в ReplaySubject, где кэшируем слои
     this.areaService.addLayer(layer);
 
-    layer.on('mouseover', (e: any) => {
-      this.highlightFeature(e);
-    });
+    // конфликтует с выбором полигона через форму
+    // layer.on('mouseover', (e: any) => {
+    //   this.highlightFeature(e);
+    // });
 
-    layer.on('mouseout', (e: any) => {
-      this.resetHighlight(e);
-    });
+    // layer.on('mouseout', (e: any) => {
+    //   this.resetHighlight(e);
+    // });
 
-    layer.on('click', (e: any) => {
-      this.zoomToFeature(e);
+    layer.on('click', (e) => {
+      this.zoomToFeatureOnClick(e);
     });
   };
 
-  zoomMapOnSelected(selected: any) {
+  public zoomMapOnSelected(selected: L.LatLngBoundsExpression): void {
     this.map.flyToBounds(selected);
   }
 
   ngOnInit(): void {
-    this.initMap();
     this.geojson = this.addGeoJsonFeatures();
+    this.initMap();
     this.geojson.addTo(this.map);
   }
 }

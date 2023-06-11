@@ -1,5 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Polygon } from 'leaflet';
 import { AreaService } from 'src/app/area.service';
 
 @Component({
@@ -7,19 +15,30 @@ import { AreaService } from 'src/app/area.service';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
 })
-export class FormComponent {
-  @Output() outSelected = new EventEmitter<any>();
+export class FormComponent implements OnInit {
+  @Output() outSelected = new EventEmitter<Polygon>();
 
-  selected: any;
-  layers: any[] = [];
+  private destroyRef: DestroyRef = inject(DestroyRef);
 
-  constructor(private areaService: AreaService) {
-    this.areaService.myLayers$.pipe().subscribe((res) => {
-      this.layers.push(res);
-    });
+  public selected: Polygon;
+  public areas$: Polygon[] = [];
+
+  constructor(private areaService: AreaService) {}
+
+  private getAreasArray(): void {
+    this.areaService
+      .getLayers()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        this.areas$.push(res);
+      });
   }
 
-  changeArea(layer: any) {
+  public changeArea(layer: Polygon): void {
     this.outSelected.emit(layer);
+  }
+
+  ngOnInit(): void {
+    this.getAreasArray();
   }
 }

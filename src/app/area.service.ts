@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Polygon } from 'leaflet';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,18 +8,13 @@ import { Subject } from 'rxjs';
 export class AreaService {
   constructor() {}
 
-  public myLayers$ = new Subject<any>();
+  layers$ = new ReplaySubject<Polygon>();
 
-  public addLayer(layer: any) {
-    this.myLayers$.next(layer);
-  }
-
-  areas: any = {
+  features: GeoJSON.FeatureCollection = {
     type: 'FeatureCollection',
     features: [
       {
         type: 'Feature',
-        properties: { id: 1, name: 'Северо-восток', isSelected: false },
         geometry: {
           coordinates: [
             [
@@ -32,10 +27,10 @@ export class AreaService {
           ],
           type: 'Polygon',
         },
+        properties: { id: 1, name: 'Северо-восток' },
       },
       {
         type: 'Feature',
-        properties: { id: 2, name: 'Центр', isSelected: false },
         geometry: {
           coordinates: [
             [
@@ -48,10 +43,10 @@ export class AreaService {
           ],
           type: 'Polygon',
         },
+        properties: { id: 2, name: 'Центр' },
       },
       {
         type: 'Feature',
-        properties: { id: 3, name: 'Юго-восток', isSelected: false },
         geometry: {
           coordinates: [
             [
@@ -64,11 +59,20 @@ export class AreaService {
           ],
           type: 'Polygon',
         },
+        properties: { id: 3, name: 'Юго-восток' },
       },
     ],
   };
 
-  getAreas() {
-    return this.areas;
+  public addLayer(layer: Polygon): void {
+    this.layers$.next(layer);
+  }
+
+  public getLayers(): ReplaySubject<Polygon> {
+    return this.layers$;
+  }
+
+  public getFeatures(): GeoJSON.FeatureCollection {
+    return this.features;
   }
 }
